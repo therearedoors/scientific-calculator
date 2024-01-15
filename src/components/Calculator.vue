@@ -1,17 +1,35 @@
-<script>
-import { defineComponent, ref } from 'vue'
-const history = ref('')
-const result = ref('')
-const addNumber = (num) => {
-    result.value += num
+<script setup lang="ts">
+import { string } from '../services/string'
+import type { Ref } from 'vue';
+import { defineComponent, ref } from 'vue';
+const history: Ref<string> = ref('');
+const result: Ref<number> = ref(0);
+const clearHistory = () => {
+    console.log('clearHistory');
+    history.value = ''
+    result.value = 0
 }
-const addOperator = (operator) => {
-    result.value += operator
+const deleteLast = () => {
+    history.value = history.value.slice(0, -1)
+}
+const addNumber = (num: number | '.') => {
+    if (num === '.' && history.value.includes('.')) return
+    string.handleZero(history, num)
+    history.value += num
+}
+const addOperator = (operator: string) => {
+    history.value += operator
+}
+const calculate = () => {
+    let sum = history.value;
+    sum = sum.replace(/×/g, '*');
+    sum = sum.replace(/÷/g, '/');
+    result.value = eval(sum);
 }
 </script>
 <template>
     <div class="wrapper">
-    <div class="logo">
+    <div>
         <div class="logo">
         <img alt="Vue logo" src="../assets/logo.svg" />
         </div>
@@ -24,11 +42,11 @@ const addOperator = (operator) => {
     </div>
     <div>
         <div class="calculator">
-        <div class="display">
-            <div class="display__history">
+        <div class="display bg-white">
+            <div class="text-slate">
             {{ history }}
             </div>
-            <div class="display__result">
+            <div class="text-slate font-large">
             {{ result }}
             </div>
         </div>
@@ -102,5 +120,20 @@ const addOperator = (operator) => {
 .wrapper {
     display: flex;
     flex-direction: column;
+}
+
+.logo {
+    height: 100px;
+    width: 100px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.button {
+    height: 30px;
+    width: 84px;
 }
 </style>
