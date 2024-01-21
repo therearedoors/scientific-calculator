@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { string } from '../services/string'
 import type { Ref } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
+import CalculatorDisplay from './Calculator-Display.vue';
 const history: Ref<string> = ref('');
 const result: Ref<number> = ref(0);
 const clearHistory = () => {
@@ -42,14 +43,7 @@ const calculate = () => {
     </div>
     <div>
         <div class="calculator">
-        <div class="display bg-white">
-            <div class="text-slate">
-            {{ history }}
-            </div>
-            <div class="text-slate font-large">
-            {{ result }}
-            </div>
-        </div>
+        <CalculatorDisplay :history="history" :result="result"/>
         <div class="buttons">
             <button
             class="button button--secondary"
@@ -130,10 +124,13 @@ const calculate = () => {
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    color: black;
 }
 
 .button {
     height: 30px;
-    width: 84px;
+    width: 90px;
+    background-color:azure;
+    border: 1px solid #ccc;
 }
 </style>
